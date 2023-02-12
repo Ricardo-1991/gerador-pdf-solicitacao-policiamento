@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { checkListDocument } from "../createDocument/checkListDocument";
 import { notificationTermDocument } from "../createDocument/notificationTermDocument";
+import logo from "../../assets/brasao-pm-ba.png";
 
 interface FormValues {
   accomodation: string;
@@ -23,17 +24,36 @@ export function FormDocument() {
   const {
     register,
     handleSubmit,
-    formState: { erros },
+    formState: { errors },
   } = useForm<FormValues>();
 
+  const [imgBase64, setImgBase64] = useState("");
+
+  useEffect(() => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = logo;
+
+    img.onload = function () {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+
+      const dataURL = canvas.toDataURL();
+      setImgBase64(dataURL);
+    };
+  }, []);
+
   function eventsData(data: FormValues) {
-    // checkListDocument(data);
-    // notificationTermDocument(data);
+    checkListDocument(data, imgBase64);
+    notificationTermDocument(data, imgBase64);
   }
 
   return (
     <>
-      <h1>Checklist Evento</h1>
+      <h2>Formulário de solicitação de Policiamento em Eventos</h2>
       <form onSubmit={handleSubmit(eventsData)}>
         <label htmlFor="">Nome do evento</label>
         <input type="text" {...register("eventName")} name="eventName" />
