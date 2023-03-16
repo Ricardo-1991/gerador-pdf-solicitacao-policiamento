@@ -10,6 +10,7 @@ interface FormValues {
   endAt: string;
   eventName: string;
   food: string;
+  policeName: string;
   location: string;
   requester: string;
   startAt: string;
@@ -22,8 +23,9 @@ export function notificationTermDocument(
   imgBase64: string
 ) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
+  const todayDate = new Date().toLocaleDateString("pt-BR");
   const logoPMBA = imgBase64;
+  console.log(dataEvent.eventKind);
 
   var docDefinition = {
     pageSize: "A4",
@@ -36,7 +38,7 @@ export function notificationTermDocument(
         alignment: "center",
       },
       {
-        text: `POLÍCIA MILITAR DA BAHIA\n COMANDO DE OPERAÇÕES POLICIAIS MILITARES\n COMANDO DE POLICIAMENTO REGIONAL SUL\n 69ª CIPM\n`,
+        text: `POLÍCIA MILITAR DA BAHIA\n COMANDO DE OPERAÇÕES POLICIAIS MILITARES\n COMANDO DE POLICIAMENTO REGIONAL SUL\n 69ª CIPM\n\n`,
         style: "header",
         alignment: "center",
       },
@@ -141,7 +143,7 @@ export function notificationTermDocument(
                 style: "tableHeader",
               },
             ],
-            [`${dataEvent.contact}`],
+            [`${dataEvent.policeName}`],
           ],
         },
         layout: "lightHorizontalLines",
@@ -157,7 +159,7 @@ export function notificationTermDocument(
                 style: "tableHeader",
               },
             ],
-            [`${dataEvent.contact}`],
+            [`${dataEvent.requester}`],
           ],
         },
         layout: "lightHorizontalLines",
@@ -169,7 +171,7 @@ export function notificationTermDocument(
           headerRows: 1,
           body: [
             [{ text: "RECEBIDO EM:", style: "tableHeader" }],
-            [`${dataEvent.contact}`],
+            [`${todayDate}`],
           ],
         },
         layout: "lightHorizontalLines",
@@ -192,5 +194,5 @@ export function notificationTermDocument(
       },
     },
   };
-  pdfMake.createPdf(docDefinition).download();
+  // pdfMake.createPdf(docDefinition).download();
 }

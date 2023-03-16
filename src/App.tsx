@@ -1,4 +1,5 @@
 import { FormDocument } from "./components/FormDocument/FormDocument";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

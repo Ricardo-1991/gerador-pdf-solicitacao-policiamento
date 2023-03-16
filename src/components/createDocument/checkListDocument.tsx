@@ -10,6 +10,7 @@ interface FormValues {
   endAt: string;
   eventName: string;
   food: string;
+  policeName: string;
   location: string;
   requester: string;
   startAt: string;
@@ -17,9 +18,17 @@ interface FormValues {
   eventKind: string;
 }
 
-export function checkListDocument(dataEvent: FormValues, imgBase64: string) {
+export function checkListDocument(
+  dataEvent: FormValues,
+  imgBase64: string,
+  amountDate: number
+) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const dateEvent = new Date(dataEvent.dateEvent).toLocaleDateString("pt-BR");
+  let teste = [];
+  for (let index = 0; index < amountDate; index++) {
+    teste.push(dataEvent["dateEvent" + index]);
+  }
 
   const logoPMBA = imgBase64;
 
@@ -54,7 +63,7 @@ export function checkListDocument(dataEvent: FormValues, imgBase64: string) {
           body: [
             ["NOME DO EVENTO", `${dataEvent.eventName}`],
             ["NOME DO SOLICITANTE/RESPONSÁVEL", `${dataEvent.requester}`],
-            ["DATA DO EVENTO", `${dateEvent}`],
+            ["DATA DO EVENTO", `${teste.map((value) => value).join(" ; ")}`],
             ["HORÁRIO DE INÍCIO", `${dataEvent.startAt}`],
             ["HORÁRIO DE TÉRMINO", `${dataEvent.endAt}`],
             ["LOCAL DO EVENTO", `${dataEvent.location}`],
